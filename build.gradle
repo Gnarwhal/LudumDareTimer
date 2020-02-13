@@ -9,10 +9,21 @@ mainClassName = 'com.gnarly.ld.Main'
 
 sourceCompatibility = 1.12
 
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Main-Class': 'com.gnarly.ld.Main'
+    }
+    baseName = project.name + '-all'
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
 repositories {
     jcenter()
 }
 
 dependencies {
-    compile group: 'net.dv8tion', name: 'JDA', version: '3.8.3_464'
+    compile ('net.dv8tion:JDA:3.8.3_464') {
+        exclude module: 'opus-java'
+    }
 }
